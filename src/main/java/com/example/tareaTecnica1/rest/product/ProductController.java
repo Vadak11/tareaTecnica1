@@ -20,7 +20,7 @@ public class ProductController {
         return productRepository.findAll();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productRepository.findById(id).orElse(null);
     }
@@ -31,7 +31,7 @@ public class ProductController {
         return productRepository.save(product);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN_ROLE')")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return productRepository.findById(id)
@@ -49,7 +49,7 @@ public class ProductController {
                 });
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN_ROLE')")
     public Product deleteProduct(@PathVariable Long id) {
         Product product = productRepository.findById(id).orElse(null);

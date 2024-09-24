@@ -29,10 +29,10 @@ public class UserSeeder implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        this.createSuperAdministrator();
+        this.createRegularUser();
     }
 
-    private void createSuperAdministrator() {
+    private void createRegularUser() {
         User regularUser = new User();
         regularUser.setName("Regular");
         regularUser.setLastname("User");

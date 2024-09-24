@@ -20,7 +20,7 @@ public class CategoryController {
         return categoryRepository.findAll();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Category getCategoryById(@PathVariable Long id) {
         return categoryRepository.findById(id).orElse(null);
     }
@@ -31,7 +31,7 @@ public class CategoryController {
         return categoryRepository.save(category);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN_ROLE')")
     public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
         return categoryRepository.findById(id)
@@ -46,7 +46,7 @@ public class CategoryController {
                 });
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN_ROLE')")
     public Category deleteCategory(@PathVariable Long id) {
         Category category = categoryRepository.findById(id).orElse(null);

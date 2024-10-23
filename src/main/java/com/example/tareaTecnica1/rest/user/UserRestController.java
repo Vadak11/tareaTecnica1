@@ -1,8 +1,17 @@
 package com.example.tareaTecnica1.rest.user;
 
+import com.example.tareaTecnica1.logic.entity.http.GlobalResponseHandler;
+import com.example.tareaTecnica1.logic.entity.http.Meta;
+import com.example.tareaTecnica1.logic.entity.product.Product;
 import com.example.tareaTecnica1.logic.entity.user.User;
 import com.example.tareaTecnica1.logic.entity.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,11 +28,26 @@ public class UserRestController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public List<User> getAllUsers() {
-        return UserRepository.findAll();
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'SUPER_ADMIN_ROLE')")
+    public ResponseEntity<?> getAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request) {
+
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<User> userPage = userRepository.findAll(pageable);
+        Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
+        meta.setTotalPages(userPage.getTotalPages());
+        meta.setTotalElements(userPage.getTotalElements());
+        meta.setPageNumber(userPage.getNumber() + 1);
+        meta.setPageSize(userPage.getSize());
+
+        return new GlobalResponseHandler().handleResponse("Users retrieved successfully",
+                userPage.getContent(), HttpStatus.OK, meta);
     }
 
     @PostMapping

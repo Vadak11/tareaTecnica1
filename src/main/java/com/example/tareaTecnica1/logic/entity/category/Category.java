@@ -1,10 +1,6 @@
 package com.example.tareaTecnica1.logic.entity.category;
 
-import com.example.tareaTecnica1.logic.entity.product.Product;
 import jakarta.persistence.*;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 public class Category {
